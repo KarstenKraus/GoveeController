@@ -38,16 +38,7 @@ class GoveeController:
         return devices
     
     def GetDeviceState(self, device: Device):
-
-        data = {
-            "requestId": "uuid",
-            "payload": {
-                "sku": device.GetSKU(),
-                "device": device.GetDeviceID()
-            }
-        }
-
-        r = requests.get(BASE_HOST + "router/api/v1/device/state", headers=self.headers, data=json.dumps(data))
+        r = requests.get(BASE_HOST + "router/api/v1/device/state", headers=self.headers, data=device.GeneratePayload())
         if r.status_code == 429:
             LOGGER.Log(LogTypes.ERROR, "Daily rate limit reached!")
             sys.exit(1)
